@@ -1,6 +1,8 @@
 package com.example.movies.model;
 
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -8,6 +10,7 @@ import java.util.List;
 
 @Entity
 @Data
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class Movies {
 
 
@@ -19,6 +22,8 @@ public class Movies {
     private String director;
     @Column(name = "release_year")
     private String year;
+
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User createdBy;

@@ -36,6 +36,10 @@ public class AuthController {
         if (userRepository.findByUsername(user.getUsername()).isPresent()) {
             return " Bu kullanıcı adı zaten alınmış.";
         }
+        if (user.getPassword() == null || user.getPassword().isBlank()) {
+            return " Şifre boş olamaz!";
+        }
+
 
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         userRepository.save(user);
@@ -49,6 +53,7 @@ public class AuthController {
             Authentication auth = authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword())
             );
+
             UserDetails userDetails = (UserDetails) auth.getPrincipal();
             String token = jwtUtil.generateToken(user.getUsername());
             return "Bearer " + token;

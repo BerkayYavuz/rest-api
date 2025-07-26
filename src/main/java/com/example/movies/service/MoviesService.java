@@ -1,6 +1,7 @@
 package com.example.movies.service;
 
 
+import com.example.movies.dto.MovieResponseDTO;
 import com.example.movies.model.Movies;
 import com.example.movies.model.User;
 import com.example.movies.repository.MoviesRepository;
@@ -31,12 +32,21 @@ public class MoviesService {
         return moviesRepository.findById(id);
     }
 
-    public Movies createMovie(Movies movie, String username) {
+    public MovieResponseDTO createMovie(Movies movie, String username) {
         User user = userRepository.findByUsername(username)
                 .orElseThrow(() -> new RuntimeException("Kullanıcı bulunamadı"));
         movie.setCreatedBy(user);
-        return moviesRepository.save(movie);
+        Movies saved = moviesRepository.save(movie);
+
+        return new MovieResponseDTO(
+                saved.getId(),
+                saved.getTitle(),
+                saved.getDirector(),
+                saved.getYear(),
+                saved.getCreatedBy().getUsername()
+        );
     }
+
 
 
     public Optional<Movies> updateMovie(Long id, Movies updatedMovie) {
