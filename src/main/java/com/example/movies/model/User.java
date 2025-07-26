@@ -19,10 +19,14 @@ public class User implements UserDetails {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(nullable = false, unique = true)
     private String username;
+
+    @Column(nullable = false)
     private String password;
 
-    private String role; // Kullanıcının rolü (USER, ADMIN)
+    @Column
+    private String role = "USER"; // Default olarak user verelim
 
     @ManyToMany(fetch = FetchType.EAGER, targetEntity = Movies.class, cascade = CascadeType.ALL, mappedBy = "userList")
     List<Movies> moviesList;

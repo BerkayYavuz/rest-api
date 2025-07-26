@@ -17,7 +17,10 @@ public class Movies {
 
     private String title;
     private String director;
+    @Column(name = "release_year")
     private String year;
+
+
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "user_movies",
