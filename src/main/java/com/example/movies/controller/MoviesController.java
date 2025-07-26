@@ -6,6 +6,7 @@ import com.example.movies.service.MoviesService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,9 +33,10 @@ public class MoviesController {
     }
 
     @PostMapping
-    public Movies createMovie(@RequestBody Movies movie) {
-        return moviesService.createMovie(movie);
+    public Movies createMovie(@RequestBody Movies movie, Principal principal) {
+        return moviesService.createMovie(movie, principal.getName());
     }
+
 
     @PutMapping("/{id}")
     public Movies updateMovie(@PathVariable Long id, @RequestBody Movies updatedMovie) {

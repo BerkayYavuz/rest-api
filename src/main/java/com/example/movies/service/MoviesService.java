@@ -2,6 +2,7 @@ package com.example.movies.service;
 
 
 import com.example.movies.model.Movies;
+import com.example.movies.model.User;
 import com.example.movies.repository.MoviesRepository;
 import com.example.movies.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,9 +31,13 @@ public class MoviesService {
         return moviesRepository.findById(id);
     }
 
-    public Movies createMovie(Movies movie) {
+    public Movies createMovie(Movies movie, String username) {
+        User user = userRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("Kullanıcı bulunamadı"));
+        movie.setCreatedBy(user);
         return moviesRepository.save(movie);
     }
+
 
     public Optional<Movies> updateMovie(Long id, Movies updatedMovie) {
         return moviesRepository.findById(id)

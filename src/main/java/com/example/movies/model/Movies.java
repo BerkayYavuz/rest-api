@@ -19,6 +19,10 @@ public class Movies {
     private String director;
     @Column(name = "release_year")
     private String year;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User createdBy;
+
 
 
 

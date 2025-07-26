@@ -2,6 +2,7 @@ package com.example.movies.controller;
 
 import com.example.movies.model.User;
 import com.example.movies.repository.UserRepository;
+import com.example.movies.security.JWTUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
@@ -18,6 +19,9 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    @Autowired
+    private JWTUtil jwtUtil;
+
 
     @Autowired
     public AuthController(AuthenticationManager authenticationManager, UserRepository userRepository, PasswordEncoder passwordEncoder) {
@@ -46,9 +50,10 @@ public class AuthController {
                     new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword())
             );
             UserDetails userDetails = (UserDetails) auth.getPrincipal();
-            return "Giriş başarılı: " + userDetails.getUsername();
+            String token = jwtUtil.generateToken(user.getUsername());
+            return "Bearer " + token;
         } catch (BadCredentialsException e) {
-            return " Hatalı kullanıcı adı veya şifre!";
+            return "Hatalı kullanıcı adı veya şifre!";
         }
     }
 }

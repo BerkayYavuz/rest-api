@@ -13,6 +13,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 @Configuration
 @Data
@@ -20,6 +21,10 @@ public class SecurityConfig {
 
     @Autowired
     private UserDetailsService userDetailsService;
+
+    @Autowired
+    private JWTFilter jwtFilter;
+
 
 
     @Bean
@@ -45,11 +50,14 @@ public class SecurityConfig {
         http
                 .csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/api/auth/**").permitAll() // login, register serbest
-                .anyRequest().authenticated()               // diğerleri token ister
+                .requestMatchers("/api/auth/**").permitAll()
+                .anyRequest().authenticated()
                 .and()
-                .httpBasic(); // test için (JWT gelince kaldıracağız)
+                .sessionManagement().disable() // JWT için state tutmuyoruz
+                .authenticationProvider(authenticationProvider())
+                .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
+
 }
