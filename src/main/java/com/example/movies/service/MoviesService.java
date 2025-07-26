@@ -8,6 +8,12 @@ import com.example.movies.repository.MoviesRepository;
 import com.example.movies.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
+
 
 import java.util.List;
 import java.util.Optional;
@@ -38,6 +44,8 @@ public class MoviesService {
         movie.setCreatedBy(user);
         Movies saved = moviesRepository.save(movie);
 
+        writeMovieToJsonFile(saved);
+
         return new MovieResponseDTO(
                 saved.getId(),
                 saved.getTitle(),
@@ -46,6 +54,7 @@ public class MoviesService {
                 saved.getCreatedBy().getUsername()
         );
     }
+
 
 
 
@@ -91,5 +100,18 @@ public class MoviesService {
                 ))
                 .toList();
     }
+
+    private void writeMovieToJsonFile(Movies movie) {
+        ObjectMapper mapper = new ObjectMapper();
+        File file = new File("movies.json");
+
+        try (FileWriter writer = new FileWriter(file, true)) {
+            String json = mapper.writeValueAsString(movie);
+            writer.write(json + System.lineSeparator());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 
 }
