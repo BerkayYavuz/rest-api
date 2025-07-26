@@ -49,15 +49,23 @@ public class MoviesService {
 
 
 
-    public Optional<Movies> updateMovie(Long id, Movies updatedMovie) {
-        return moviesRepository.findById(id)
-                .map(movies -> {
-                    movies.setTitle(updatedMovie.getTitle());
-                    movies.setDirector(updatedMovie.getDirector());
-                    return moviesRepository.save(movies);
-                });
+    public Optional<MovieResponseDTO> updateMovie(Long id, Movies updatedMovie, String username) {
+        return moviesRepository.findById(id).map(movie -> {
+            movie.setTitle(updatedMovie.getTitle());
+            movie.setDirector(updatedMovie.getDirector());
+            movie.setYear(updatedMovie.getYear());
 
+            Movies saved = moviesRepository.save(movie);
+            return new MovieResponseDTO(
+                    saved.getId(),
+                    saved.getTitle(),
+                    saved.getDirector(),
+                    saved.getYear(),
+                    saved.getCreatedBy().getUsername()
+            );
+        });
     }
+
 
     public boolean deleteMovie(Long id) {
         if (moviesRepository.existsById(id)) {

@@ -5,6 +5,8 @@ import com.example.movies.dto.MovieResponseDTO;
 import com.example.movies.model.Movies;
 import com.example.movies.service.MoviesService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
@@ -52,13 +54,21 @@ public class MoviesController {
 
 
     @PutMapping("/{id}")
-    public Movies updateMovie(@PathVariable Long id, @RequestBody Movies updatedMovie) {
-        return moviesService.updateMovie(id, updatedMovie).orElse(null);
+    public ResponseEntity<?> updateMovie(@PathVariable Long id, @RequestBody Movies updatedMovie, Principal principal) {
+        return moviesService.updateMovie(id, updatedMovie, principal.getName())
+                .map(ResponseEntity::ok)
+                .orElse(ResponseEntity.notFound().build());
     }
 
+
     @DeleteMapping("/{id}")
-    public String deleteMovie(@PathVariable Long id) {
+    public ResponseEntity<String> deleteMovie(@PathVariable Long id) {
         boolean deleted = moviesService.deleteMovie(id);
-        return deleted ? "Film Silindi" : "Filmi Silemedin";
+        if (deleted) {
+            return ResponseEntity.ok(" Film silindi.");
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(" Film bulunamadı.");
+        }
     }
+
 }
