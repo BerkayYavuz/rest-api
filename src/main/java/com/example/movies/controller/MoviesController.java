@@ -71,4 +71,14 @@ public class MoviesController {
         }
     }
 
+    @GetMapping("/search")
+    public List<MovieResponseDTO> searchMovies(
+            @RequestParam(required = false) String title,
+            @RequestParam(required = false) String year,
+            @RequestParam(required = false) String director
+    ) {
+        return moviesService.searchMovies(title, year, director);
+    }
+
+
 }

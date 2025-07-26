@@ -74,4 +74,22 @@ public class MoviesService {
         }
         return false;
     }
+
+    public List<MovieResponseDTO> searchMovies(String title, String year, String director) {
+        List<Movies> all = moviesRepository.findAll();
+
+        return all.stream()
+                .filter(m -> title == null || m.getTitle().toLowerCase().contains(title.toLowerCase()))
+                .filter(m -> year == null || m.getYear().equals(year))
+                .filter(m -> director == null || m.getDirector().toLowerCase().contains(director.toLowerCase()))
+                .map(m -> new MovieResponseDTO(
+                        m.getId(),
+                        m.getTitle(),
+                        m.getDirector(),
+                        m.getYear(),
+                        m.getCreatedBy().getUsername()
+                ))
+                .toList();
+    }
+
 }
