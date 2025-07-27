@@ -26,10 +26,20 @@ Bu proje bir film API'sidir. Spring Boot kullanılarak geliştirilmiştir ve JWT
 
 ### 1. Kopyalama
 
+
 ```bash
 git clone https://github.com/kullaniciAdi/movie-api.git
 
 cd movie-api
+```
 
-./mwnw spring-boot:run
+### 2. Linux/MacOS için Çalıştırma
 
+```
+./mwnw spring-boot:run 
+```
+
+### 3. Windows için Çalıştırma
+```
+.\mvnw.cmd spring-boot:run
+```
