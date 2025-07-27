@@ -56,7 +56,7 @@ public class AuthController {
 
             UserDetails userDetails = (UserDetails) auth.getPrincipal();
             String token = jwtUtil.generateToken(user.getUsername());
-            return "Bearer " + token;
+            return "Doğrulama Kodunuz: Bearer " + token;
         } catch (BadCredentialsException e) {
             return "Hatalı kullanıcı adı veya şifre!";
         }
