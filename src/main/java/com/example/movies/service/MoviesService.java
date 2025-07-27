@@ -84,13 +84,14 @@ public class MoviesService {
         return false;
     }
 
-    public List<MovieResponseDTO> searchMovies(String title, String year, String director) {
+    public List<MovieResponseDTO> searchMovies(String title, String year, String director, String createdBy) {
         List<Movies> all = moviesRepository.findAll();
 
         return all.stream()
                 .filter(m -> title == null || m.getTitle().toLowerCase().contains(title.toLowerCase()))
                 .filter(m -> year == null || m.getYear().equals(year))
                 .filter(m -> director == null || m.getDirector().toLowerCase().contains(director.toLowerCase()))
+                .filter(m -> createdBy == null || m.getCreatedBy().getUsername().equalsIgnoreCase(createdBy))
                 .map(m -> new MovieResponseDTO(
                         m.getId(),
                         m.getTitle(),
@@ -100,6 +101,7 @@ public class MoviesService {
                 ))
                 .toList();
     }
+
 
     private void writeMovieToJsonFile(Movies movie) {
         ObjectMapper mapper = new ObjectMapper();

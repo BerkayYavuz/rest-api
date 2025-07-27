@@ -75,9 +75,10 @@ public class MoviesController {
     public List<MovieResponseDTO> searchMovies(
             @RequestParam(required = false) String title,
             @RequestParam(required = false) String year,
-            @RequestParam(required = false) String director
+            @RequestParam(required = false) String director,
+            @RequestParam(required = false) String createdBy
     ) {
-        return moviesService.searchMovies(title, year, director);
+        return moviesService.searchMovies(title, year, director, createdBy);
     }
 
 
